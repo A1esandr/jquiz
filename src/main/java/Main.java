@@ -10,7 +10,7 @@ public class Main {
         TelegramBotsApi botsApi = new TelegramBotsApi();
 
         try {
-            botsApi.registerBot(new PollBot());
+            botsApi.registerBot(new PollBot(System.getenv("TOKEN")));
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

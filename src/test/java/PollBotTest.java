@@ -28,18 +28,11 @@ public class PollBotTest {
 
     @Test
     public void WhenPollBot_ReceiveEmptyUpdate_NotCallExecute() throws TelegramApiException {
-        PollBotStub stub = mock(PollBotStub.class);
+        PollBot stub = mock(PollBot.class);
 
         Update update = new Update();
         stub.onUpdateReceived(update);
 
         verify(stub, times(0)).execute(any(SendMessage.class));
-    }
-
-
-    private class PollBotStub extends PollBot {
-        PollBotStub () {
-            super("");
-        }
     }
 }

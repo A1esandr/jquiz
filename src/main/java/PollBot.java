@@ -9,11 +9,13 @@ public class PollBot extends TelegramLongPollingBot {
     private static final Logger log = Logger.getLogger(PollBot.class.getName());
     private String token;
     private String name;
+
     PollBot (String token) {
         super();
         this.token = token;
         this.name = "PollBot";
     }
+    
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {

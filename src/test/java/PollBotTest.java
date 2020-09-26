@@ -1,6 +1,7 @@
 import org.junit.Before;
 import org.junit.Test;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -28,11 +29,29 @@ public class PollBotTest {
 
     @Test
     public void WhenPollBot_ReceiveEmptyUpdate_NotCallExecute() throws TelegramApiException {
-        PollBot stub = mock(PollBot.class);
-
+        PollBot bot = mock(PollBot.class);
         Update update = new Update();
-        stub.onUpdateReceived(update);
+        doCallRealMethod().when(bot).onUpdateReceived(update);
 
-        verify(stub, times(0)).execute(any(SendMessage.class));
+        bot.onUpdateReceived(update);
+
+        verify(bot, times(0)).execute(any(SendMessage.class));
+    }
+
+    @Test
+    public void WhenPollBot_ReceiveNotEmptyUpdate_CallExecute() throws TelegramApiException {
+        PollBot bot = mock(PollBot.class);
+        Update update = mock(Update.class);
+        Message message = mock(Message.class);
+        doReturn(true).when(update).hasMessage();
+        doReturn(true).when(message).hasText();
+        doReturn("test").when(message).getText();
+        doReturn(1L).when(message).getChatId();
+        doReturn(message).when(update).getMessage();
+        doCallRealMethod().when(bot).onUpdateReceived(update);
+
+        bot.onUpdateReceived(update);
+
+        verify(bot, times(1)).execute(any(SendMessage.class));
     }
 }

@@ -5,17 +5,17 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.logging.Logger;
 
-public class PollBot extends TelegramLongPollingBot {
-    private static final Logger log = Logger.getLogger(PollBot.class.getName());
+public class HiBot extends TelegramLongPollingBot {
+    private static final Logger log = Logger.getLogger(HiBot.class.getName());
     private final String token;
     private final String name;
 
-    PollBot (String token) {
+    HiBot (String token) {
         super();
         this.token = token;
-        this.name = "PollBot";
+        this.name = "HiBot";
     }
-    
+
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {

@@ -3,6 +3,7 @@ import org.junit.Test;
 import org.telegram.telegrambots.meta.api.methods.polls.SendPoll;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -57,6 +58,25 @@ public class QuizBotTest {
     }
 
     @Test
+    public void WhenQuizBot_ReceiveNotEmptyUpdate_CallExecuteWithSendPoll() {
+        QuizBotSpy bot = new QuizBotSpy("1");
+        Update update = mock(Update.class);
+        Message message = mock(Message.class);
+        doReturn(true).when(update).hasMessage();
+        doReturn(true).when(message).hasText();
+        doReturn("test").when(message).getText();
+        doReturn(1L).when(message).getChatId();
+        doReturn(message).when(update).getMessage();
+
+        bot.onUpdateReceived(update);
+
+        SendPoll result = bot.getPoll();
+        assertEquals("1", result.getChatId());
+        assertEquals("quiz", result.getType());
+        assertFalse(result.getAnonymous());
+    }
+
+    @Test
     public void WhenQuizBot_GetSendPoll() {
         Update update = mock(Update.class);
         Message message = mock(Message.class);
@@ -71,5 +91,22 @@ public class QuizBotTest {
         assertEquals("1", result.getChatId());
         assertEquals("quiz", result.getType());
         assertFalse(result.getAnonymous());
+    }
+
+    private class QuizBotSpy extends QuizBot {
+        private SendPoll sendPoll;
+
+        QuizBotSpy(String token) {
+            super(token);
+        }
+
+        @Override
+        protected void actualExecute(SendPoll sendPoll) {
+            this.sendPoll = sendPoll;
+        }
+
+        public SendPoll getPoll() {
+            return this.sendPoll;
+        }
     }
 }

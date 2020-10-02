@@ -5,6 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -53,5 +54,22 @@ public class QuizBotTest {
         bot.onUpdateReceived(update);
 
         verify(bot, times(1)).actualExecute(any(SendPoll.class));
+    }
+
+    @Test
+    public void WhenQuizBot_GetSendPoll() {
+        Update update = mock(Update.class);
+        Message message = mock(Message.class);
+        doReturn(true).when(update).hasMessage();
+        doReturn(true).when(message).hasText();
+        doReturn("test").when(message).getText();
+        doReturn(1L).when(message).getChatId();
+        doReturn(message).when(update).getMessage();
+
+        SendPoll result = quizBot.getSendPoll(update);
+
+        assertEquals("1", result.getChatId());
+        assertEquals("quiz", result.getType());
+        assertFalse(result.getAnonymous());
     }
 }

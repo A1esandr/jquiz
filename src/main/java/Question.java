@@ -14,4 +14,12 @@ public class Question {
     public String getText() {
         return text;
     }
+
+    public List<String> getOptions() {
+        return options;
+    }
+
+    public int getAnswerIndex() {
+        return answerIndex;
+    }
 }

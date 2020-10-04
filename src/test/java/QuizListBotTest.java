@@ -66,7 +66,7 @@ public class QuizListBotTest {
         Message message = mock(Message.class);
         doReturn(true).when(update).hasMessage();
         doReturn(true).when(message).hasText();
-        doReturn("test").when(message).getText();
+        doReturn("0").when(message).getText();
         doReturn(1L).when(message).getChatId();
         doReturn(message).when(update).getMessage();
 
@@ -102,7 +102,7 @@ public class QuizListBotTest {
         Message message = mock(Message.class);
         doReturn(true).when(update).hasMessage();
         doReturn(true).when(message).hasText();
-        doReturn("1").when(message).getText();
+        doReturn("0").when(message).getText();
         doReturn(1L).when(message).getChatId();
         doReturn(message).when(update).getMessage();
 

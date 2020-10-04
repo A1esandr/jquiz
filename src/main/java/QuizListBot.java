@@ -3,6 +3,7 @@ import org.telegram.telegrambots.meta.api.methods.polls.SendPoll;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -17,6 +18,8 @@ public class QuizListBot extends TelegramLongPollingBot {
         super();
         this.token = token;
         this.name = "QuizListBot";
+        this.questions = new ArrayList<>();
+        this.questions.add(new Question("Select method of Object in Java", Arrays.asList("copy", "getClass()"), 1));
     }
 
     protected List<Question> getQuestions() {
@@ -33,11 +36,11 @@ public class QuizListBot extends TelegramLongPollingBot {
     }
 
     protected SendPoll getSendPoll(Update update) {
-        List<String> options = Arrays.asList("Yes", "No");
-        SendPoll sendPoll = new SendPoll(update.getMessage().getChatId(), "Are you human?", options);
+        Question question = this.questions.get(Integer.parseInt(update.getMessage().getText()));
+        SendPoll sendPoll = new SendPoll(update.getMessage().getChatId(), question.getText(), question.getOptions());
         sendPoll.setAnonymous(false);
         sendPoll.setType("quiz");
-        sendPoll.setCorrectOptionId(0);
+        sendPoll.setCorrectOptionId(question.getAnswerIndex());
         return sendPoll;
     }
 

@@ -6,8 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.doReturn;
@@ -114,6 +113,26 @@ public class QuizListBotTest {
         assertFalse(result.getAnonymous());
         List<Question> questions = bot.getQuestions();
         assertEquals(questions.get(0).getText(), result.getQuestion());
+    }
+
+    @Test
+    public void WhenQuizBot_ReceiveUpdateWithWrongNumber_ReturnNothing() {
+        QuizBotSpy bot = new QuizBotSpy("1");
+        Update update = mock(Update.class);
+        Message message = mock(Message.class);
+        doReturn(true).when(update).hasMessage();
+        doReturn(true).when(message).hasText();
+        doReturn("10").when(message).getText();
+        doReturn(1L).when(message).getChatId();
+        doReturn(message).when(update).getMessage();
+
+        bot.onUpdateReceived(update);
+
+        SendPoll result = bot.getPoll();
+        assertEquals("1", result.getChatId());
+        assertEquals("quiz", result.getType());
+        assertFalse(result.getAnonymous());
+        assertNull(result.getQuestion());
     }
 
     private class QuizBotSpy extends QuizListBot {

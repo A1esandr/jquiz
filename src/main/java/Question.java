@@ -1,9 +1,9 @@
 import java.util.List;
 
 public class Question {
-    private String text;
-    private List<String> options;
-    private int answerIndex;
+    private final String text;
+    private final List<String> options;
+    private final int answerIndex;
 
     Question(String text, List<String> options, int answerIndex) {
         this.text = text;

@@ -135,6 +135,26 @@ public class QuizListBotTest {
         assertNull(result.getQuestion());
     }
 
+    @Test
+    public void WhenQuizBot_ReceiveUpdateWithNegativeNumber_ReturnNothing() {
+        QuizBotSpy bot = new QuizBotSpy("1");
+        Update update = mock(Update.class);
+        Message message = mock(Message.class);
+        doReturn(true).when(update).hasMessage();
+        doReturn(true).when(message).hasText();
+        doReturn("-1").when(message).getText();
+        doReturn(1L).when(message).getChatId();
+        doReturn(message).when(update).getMessage();
+
+        bot.onUpdateReceived(update);
+
+        SendPoll result = bot.getPoll();
+        assertEquals("1", result.getChatId());
+        assertEquals("quiz", result.getType());
+        assertFalse(result.getAnonymous());
+        assertNull(result.getQuestion());
+    }
+
     private class QuizBotSpy extends QuizListBot {
         private SendPoll sendPoll;
 
